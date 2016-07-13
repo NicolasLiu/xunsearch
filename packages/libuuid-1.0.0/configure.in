@@ -1,0 +1,70 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.63])
+AC_INIT([libuuid], [1.0.0])
+AC_CONFIG_SRCDIR([compare.c])
+SHARED_LIB_VERSION=1:0:0
+
+AM_INIT_AUTOMAKE
+AM_CONFIG_HEADER([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_MAKE_SET
+AC_PROG_LIBTOOL
+AC_PROG_INSTALL
+
+# libtool
+LIBTOOL="$LIBTOOL --preserve-dup-deps"
+AC_SUBST(LIBTOOL)
+AC_SUBST(SHARED_LIB_VERSION)
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_CHECK_HEADERS([fcntl.h inttypes.h netinet/in.h stdlib.h string.h sys/file.h sys/ioctl.h sys/socket.h sys/time.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_INT8_T
+AC_TYPE_MODE_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_SSIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+AC_TYPE_UINT8_T
+
+# word size
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(long)
+AC_CHECK_SIZEOF(long long)
+SIZEOF_SHORT=$ac_cv_sizeof_short
+SIZEOF_INT=$ac_cv_sizeof_int
+SIZEOF_LONG=$ac_cv_sizeof_long
+SIZEOF_LONG_LONG=$ac_cv_sizeof_long_long
+AC_SUBST(SIZEOF_SHORT)
+AC_SUBST(SIZEOF_INT)
+AC_SUBST(SIZEOF_LONG)
+AC_SUBST(SIZEOF_LONG_LONG)
+
+# Man pages variable
+E2FSPROGS_MONTH=December
+E2FSPROGS_YEAR=2010
+E2FSPROGS_VERSION=1.41.14
+AC_SUBST(E2FSPROGS_MONTH)
+AC_SUBST(E2FSPROGS_YEAR)
+AC_SUBST(E2FSPROGS_VERSION)
+
+# Checks for library functions.
+AC_FUNC_FORK
+AC_CHECK_FUNCS([ftruncate getdtablesize gettimeofday getrlimit memset socket strtoul sysconf])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT([uuid_types.h])
+
