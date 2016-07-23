@@ -177,7 +177,7 @@ elif ! test -z "$new_version" && test "$new_version" != "$old_version" ; then
 fi
 
 if test "$do_install" = "yes" ; then
-  cp packages/scws-$new_version scws-$new_version
+  cp -r packages/scws-$new_version scws-$new_version
   cd scws-$new_version
   echo "Configuring scws ..."
   ./configure --prefix=$prefix >> ../setup.log 2>&1
@@ -229,7 +229,7 @@ done
 if test -z "$uuid_place" ; then
   uuid_place=$prefix
   echo "no, try to install it"
-  cp packages/libuuid-1.0.0 libuuid-1.0.0
+  cp -r packages/libuuid-1.0.0 libuuid-1.0.0
   cd libuuid-1.0.0
   echo "Configuring libuuid ..."
   ./configure --prefix=$prefix >> ../setup.log 2>&1
@@ -276,7 +276,7 @@ elif ! test -z "$new_version" && test "$new_version" != "$old_version" ; then
 fi
 
 if test "$do_install" = "yes" ; then
-  cp packages/xapian-core-scws-$new_version xapian-core-scws-$new_version
+  cp -r packages/xapian-core-scws-$new_version xapian-core-scws-$new_version
   cd xapian-core-scws-$new_version
   echo "Configuring xapian-core-scws ..."
   ./configure --prefix=$prefix --with-scws=$prefix $xapian_env >> ../setup.log 2>&1
@@ -317,7 +317,7 @@ elif ! test -z "$new_version" && test "$new_version" != "$old_version" ; then
 fi
 
 if test "$do_install" = "yes" ; then
-  cp packages/libevent-$new_version libevent-$new_version
+  cp -r packages/libevent-$new_version libevent-$new_version
   cd libevent-$new_version
   echo "Configuring libevent ..."
   ./configure --prefix=$prefix >> ../setup.log 2>&1
@@ -340,7 +340,7 @@ if test -z "$new_version" ; then
   echo "ERROR: Missing xunsearch package (缺少 xunsearch 安装包)"
   exit 2
 fi
-cp packages/xunsearch-$new_version xunsearch-$new_version
+cp -r packages/xunsearch-$new_version xunsearch-$new_version
 cd xunsearch-$new_version
 echo "Configuring xunsearch ..."
 ./configure --prefix=$prefix --with-scws=$prefix $xs_add_option \
