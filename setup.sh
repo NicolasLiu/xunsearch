@@ -180,6 +180,7 @@ if test "$do_install" = "yes" ; then
   cp -r packages/scws-$new_version scws-$new_version
   cd scws-$new_version
   echo "Configuring scws ..."
+  chmod +x configure
   ./configure --prefix=$prefix >> ../setup.log 2>&1
   if test $? -ne 0 ; then
     setup_abort "configure scws"
@@ -232,6 +233,7 @@ if test -z "$uuid_place" ; then
   cp -r packages/libuuid-1.0.0 libuuid-1.0.0
   cd libuuid-1.0.0
   echo "Configuring libuuid ..."
+  chmod +x configure
   ./configure --prefix=$prefix >> ../setup.log 2>&1
   if test $? -ne 0 ; then
     setup_abort "configure libuuid"
@@ -279,6 +281,7 @@ if test "$do_install" = "yes" ; then
   cp -r packages/xapian-core-scws-$new_version xapian-core-scws-$new_version
   cd xapian-core-scws-$new_version
   echo "Configuring xapian-core-scws ..."
+  chmod +x configure
   ./configure --prefix=$prefix --with-scws=$prefix $xapian_env >> ../setup.log 2>&1
   if test $? -ne 0 ; then
     setup_abort "configure xapian-core-scws"
@@ -320,6 +323,7 @@ if test "$do_install" = "yes" ; then
   cp -r packages/libevent-$new_version libevent-$new_version
   cd libevent-$new_version
   echo "Configuring libevent ..."
+  chmod +x configure
   ./configure --prefix=$prefix >> ../setup.log 2>&1
   if test $? -ne 0 ; then
     setup_abort "configure libevent"
@@ -343,6 +347,7 @@ fi
 cp -r packages/xunsearch-$new_version xunsearch-$new_version
 cd xunsearch-$new_version
 echo "Configuring xunsearch ..."
+chmod +x configure
 ./configure --prefix=$prefix --with-scws=$prefix $xs_add_option \
 --with-libevent=$prefix --with-xapian=$prefix >> ../setup.log 2>&1
 if test $? -ne 0 ; then
