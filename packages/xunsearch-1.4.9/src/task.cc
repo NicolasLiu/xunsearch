@@ -8,6 +8,7 @@
 
 #include <string>
 #include <set>
+#include <vector>
 
 #include <stdio.h>
 #include <string.h>
@@ -23,6 +24,7 @@
 #include "task.h"
 #include "pinyin.h"
 #include "import.h"
+#include "KeyExtract.h"
 
 /**
  * Reset debug log macro to contain tid
@@ -47,6 +49,7 @@ static scws_t _scws;
 extern Xapian::Stem stemmer;
 extern Xapian::SimpleStopper *stopper;
 using std::string;
+using std::vector;
 
 /**
  * Local static variables
@@ -1886,6 +1889,41 @@ static int zcmd_scws_set(XS_CONN *conn)
 	return CMD_RES_CONT;
 }
 
+int splitKeyWords(const string& str, vector<string>& ret_, string sep = "#")
+{
+    if (str.empty())
+    {
+        return 0;
+    }
+
+    string tmp;
+    string::size_type pos_begin = str.find_first_not_of(sep);
+    string::size_type comma_pos = 0;
+
+    while (pos_begin != string::npos)
+    {
+        comma_pos = str.find(sep, pos_begin);
+        if (comma_pos != string::npos)
+        {
+            tmp = str.substr(pos_begin, comma_pos - pos_begin);
+            pos_begin = comma_pos + sep.length();
+        }
+        else
+        {
+            tmp = str.substr(pos_begin);
+            pos_begin = comma_pos;
+        }
+
+        if (!tmp.empty())
+        {
+            ret_.push_back(tmp);
+            tmp.clear();
+        }
+    }
+    return 0;
+}
+
+
 /**
  * scws get result
  */
@@ -1916,33 +1954,34 @@ static int zcmd_scws_get(XS_CONN *conn)
 		int wlen, size = 0;
 		struct scws_response *rep = NULL;
 		char *xattr = fetch_scws_xattr(cmd);
-
-		scws_send_text(scws, XS_CMD_BUF(cmd), XS_CMD_BLEN(cmd));
-		cur = top = scws_get_tops(scws, cmd->arg2, xattr);
-		while (cur != NULL) {
-			wlen = strlen(cur->word);
+		
+		KeyExtract_Init(NULL, UTF8_CODE);
+		string bufstr(XS_CMD_BUF(cmd), XS_CMD_BLEN(cmd));
+		const char *keywords_str = KeyExtract_GetKeyWords(bufstr.c_str(), cmd->arg2, true);
+		std::vector<string> keywords;
+		splitKeyWords(keywords_str, keywords, "#");
+		for(int i = 0, i < keywords.size(); i++)
+		{
+			std::vector<string> keywordFields;
+			splitKeyWords(keywords[i].c_str(), keywordFields, "/");
+			wlen = strlen(keywordFields[0].c_str());
 			if (!size || wlen > (size - sizeof(struct scws_response))) {
 				size = sizeof(struct scws_response) +wlen;
 				rep = (struct scws_response *) realloc(rep, size);
 			}
-			// FIXME:
-			if (rep == NULL) {
-				break;
-			}
-			rep->off = cur->times;
+			sscanf(keywordFields[3].c_str(), "%d", &rep->off);
 			rep->attr[3] = '\0';
-			memcpy(rep->attr, cur->attr, 2);
-			memcpy(rep->word, cur->word, wlen);
+			memcpy(rep->attr, keywordFields[1].c_str(), 2);
+			memcpy(rep->word, keywordFields[0].c_str(), wlen);
 			CONN_RES_OK3(SCWS_TOPS, (const char *) rep, wlen + sizeof(struct scws_response));
-			cur = cur->next;
 		}
-		scws_free_tops(top);
 		if (xattr != NULL) {
 			free(xattr);
 		}
 		if (rep != NULL) {
 			free(rep);
 		}
+		KeyExtract_Exit();
 		return CONN_RES_OK2(SCWS_TOPS, NULL);
 	} else {
 		scws_res_t res, cur;
