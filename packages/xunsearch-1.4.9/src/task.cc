@@ -1960,7 +1960,7 @@ static int zcmd_scws_get(XS_CONN *conn)
 		const char *keywords_str = KeyExtract_GetKeyWords(bufstr.c_str(), cmd->arg2, true);
 		std::vector<string> keywords;
 		splitKeyWords(keywords_str, keywords, "#");
-		for(int i = 0, i < keywords.size(); i++)
+		for(int i = 0; i < keywords.size(); i++)
 		{
 			std::vector<string> keywordFields;
 			splitKeyWords(keywords[i].c_str(), keywordFields, "/");
