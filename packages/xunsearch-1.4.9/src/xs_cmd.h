@@ -199,8 +199,6 @@ struct xs_import_hdr
  */
 #define	CMD_SEARCH_GET_RESULT	66
 
-#define CMD_SEARCH_GET_SIMILAR	67
-
 /**
  * Specifying the name of database to search, and close the specified db first.
  * Default is: db in the project directory

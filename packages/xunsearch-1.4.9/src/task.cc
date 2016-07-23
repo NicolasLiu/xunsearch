@@ -894,32 +894,6 @@ static int zcmd_task_get_total(XS_CONN *conn)
 }
 
 /**
- * Get similar items form database
- */
-static int zcmd_task_get_similar(XS_CONN *conn)
-{
-	XS_CMD *cmd = conn->zcmd;
-	struct search_zarg *zarg = (struct search_zarg *) conn->zarg;
-	unsigned int total = zarg->db->get_doccount();
-	CONN_RES_OK3(RESULT_BEGIN, (char *) &total, sizeof(total));
-	Xapian::PostingIterator d = zarg->db->postlist_begin(string());
-	while (d != zarg->db->postlist_end(string()))
-	{
-		//get_document
-		struct result_doc rd;
-		rd.docid = *d;
-		//rd.percent = get_percent();
-
-		// send the doc
-		if (send_result_doc(conn, &rd, NULL) != CMD_RES_CONT) {
-			break;
-		}
-		d++;
-    }
-    return CONN_RES_OK(RESULT_END);
-}
-
-/**
  * Get total matched result
  */
 static int zcmd_task_get_result(XS_CONN *conn)
@@ -1847,7 +1821,6 @@ static zcmd_exec_tab zcmd_task_tab[] = {
 	{CMD_SEARCH_ADD_DB, zcmd_task_set_db},
 	{CMD_SEARCH_GET_TOTAL, zcmd_task_get_total},
 	{CMD_SEARCH_GET_RESULT, zcmd_task_get_result},
-	{CMD_SEARCH_GET_SIMILAR, zcmd_task_get_similar},
 	{CMD_SEARCH_GET_SYNONYMS, zcmd_task_get_synonyms},
 	{CMD_QUERY_TERM, zcmd_task_add_query},
 	{CMD_QUERY_RANGE, zcmd_task_add_query},
