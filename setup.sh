@@ -347,6 +347,12 @@ fi
 cp -r packages/xunsearch-$new_version xunsearch-$new_version
 cd xunsearch-$new_version
 echo "Configuring xunsearch ..."
+cp -r KeyExtract/Data $prefix/bin
+if [ $(getconf WORD_BIT) = '32' ] && [ $(getconf LONG_BIT) = '64' ] ; then
+    cp KeyExtract/linux64/libKeyExtract.so /usr/local/lib
+else
+    cp KeyExtract/linux32/libKeyExtract.so /usr/local/lib
+fi
 chmod +x configure
 ./configure --prefix=$prefix --with-scws=$prefix $xs_add_option \
 --with-libevent=$prefix --with-xapian=$prefix >> ../setup.log 2>&1

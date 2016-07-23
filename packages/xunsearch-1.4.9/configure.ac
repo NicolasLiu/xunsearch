@@ -298,6 +298,16 @@ AC_CHECK_LIB(pthread,
 	]
 )
 
+# KeyExtract check
+AC_CHECK_LIB(KeyExtract, 
+	KeyExtract_Exit,
+	[ 
+		LIBS="$LIBS -lKeyExtract"
+	], [
+		AC_MSG_ERROR([You need to have libKeyExtract.so around])
+	]
+)
+
 # Has sdk dev files?
 AM_CONDITIONAL([HAVE_SDK_PHP_DEV], [test -d sdk/php/dev])
 
