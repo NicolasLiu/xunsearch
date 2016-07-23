@@ -20,7 +20,7 @@
  ****************************************************************************/
 #if !defined(__KEYEXTRACT_2013_LIB_INCLUDED__)
 #define __KeyExtract_2013_LIB_INCLUDED__
-#ifdef OS_LINUX
+#ifdef __LINUX__
 #define KEYEXTRACT_API extern "C" 
 #else
 #ifdef KEYEXTRACT_EXPORTS
