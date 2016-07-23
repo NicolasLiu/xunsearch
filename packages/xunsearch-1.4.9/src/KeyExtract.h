@@ -20,15 +20,9 @@
  ****************************************************************************/
 #if !defined(__KEYEXTRACT_2013_LIB_INCLUDED__)
 #define __KeyExtract_2013_LIB_INCLUDED__
-#ifdef __LINUX__
+
 #define KEYEXTRACT_API extern "C" 
-#else
-#ifdef KEYEXTRACT_EXPORTS
-#define KEYEXTRACT_API extern "C" __declspec(dllexport)
-#else
-#define KEYEXTRACT_API extern "C" __declspec(dllimport)
-#endif
-#endif
+
 
 #define GBK_CODE 0//Ä¬ÈÏÖ§³ÖGBK±àÂë
 #define UTF8_CODE GBK_CODE+1//UTF8±àÂë
