@@ -1955,7 +1955,7 @@ static int zcmd_scws_get(XS_CONN *conn)
 		struct scws_response *rep = NULL;
 		char *xattr = fetch_scws_xattr(cmd);
 		
-		
+		KeyExtract_Init(NULL, UTF8_CODE);
 		string bufstr(XS_CMD_BUF(cmd), XS_CMD_BLEN(cmd));
 		const char *keywords_str = KeyExtract_GetKeyWords(bufstr.c_str(), (int)cmd->arg2, true);
 		std::vector<string> keywords;
@@ -1981,7 +1981,7 @@ static int zcmd_scws_get(XS_CONN *conn)
 		if (rep != NULL) {
 			free(rep);
 		}
-		
+		KeyExtract_Exit();
 		return CONN_RES_OK2(SCWS_TOPS, NULL);
 	} else {
 		scws_res_t res, cur;
