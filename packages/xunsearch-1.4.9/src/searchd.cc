@@ -37,6 +37,7 @@
 #include "tpool.h"
 #include "task.h"
 #include "searchd.h"
+#include "KeyExtract.h"
 #ifdef HAVE_MEMORY_CACHE
 #    include "mcache.h"
 #endif
@@ -692,6 +693,9 @@ int main(int argc, char *argv[])
 	setproctitle("master");
 	log_notice("ready for system signal (WORKER_NUM:%d)", worker_num);
 
+	//init KeyExtract
+	KeyExtract_Init(NULL, UTF8_CODE);
+
 	// loop to wait signals
 	alarm(300); // first alarm timer
 	while (1) {
@@ -798,5 +802,6 @@ int main(int argc, char *argv[])
 main_end:
 	log_debug("main end");
 	main_cleanup();
+	KeyExtract_Exit();
 	exit(main_flag & FLAG_NO_ERROR ? 0 : -1);
 }
