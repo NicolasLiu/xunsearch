@@ -2707,10 +2707,14 @@ class XSTokenizerScws implements XSTokenizer
 		$text = $this->applySetting($text);
 		$cmd = new XSCommand(XS_CMD_SEARCH_SCWS_GET, XS_CMD_SCWS_GET_TOPS, $limit, $text, $xattr);
 		$res = self::$_server->execCommand($cmd, XS_CMD_OK_SCWS_TOPS);
+		$attrs = explode(',', $xattr);
 		while ($res->buf !== '') {
 			$tmp = unpack('Itimes/a4attr/a*word', $res->buf);
 			$tmp['word'] = XS::convert($tmp['word'], self::$_charset, 'UTF-8');
-			$words[] = $tmp;
+			$tmp['attr'] = trim($tmp['attr']);
+			if(empty($xattr) || in_array($tmp['attr'], $attrs)) {
+				$words[] = $tmp;
+			}
 			$res = self::$_server->getRespond();
 		}
 		return $words;
